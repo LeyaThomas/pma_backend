@@ -27,3 +27,20 @@ class ProjectEmployee(models.Model):
 
     def __str__(self):
         return f'{self.project.name} - {self.employee.name}'
+    
+class EmployeeAnswer(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Cususer, on_delete=models.CASCADE)
+    mark = models.IntegerField(default=0)
+    question1 = models.BooleanField(default=False)
+    question2 = models.BooleanField(default=False)
+    question3 = models.BooleanField(default=False)
+    question4 = models.BooleanField(default=False)
+    question5 = models.BooleanField(default=False)
+
+    def calculate_mark(self):
+        return (self.question1 + self.question2 + self.question3 + self.question4 + self.question5)
+
+    def save(self, *args, **kwargs):
+        self.mark = self.calculate_mark()
+        super().save(*args, **kwargs)

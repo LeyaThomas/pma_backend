@@ -1,8 +1,10 @@
 #projects.urls.py
-from django.urls import path
-from .views import ProjectListCreateView, ProjectRetrieveUpdateDestroyView ,ProjectEmployeeListCreateView, EmployeeProjectsView, ProjectEmployeesView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import ProjectListCreateView, ProjectRetrieveUpdateDestroyView ,ProjectEmployeeListCreateView, EmployeeProjectsView, ProjectEmployeesView, EmployeeAnswerViewSet
  
-
+router = DefaultRouter()
+router.register('employeeanswer', EmployeeAnswerViewSet)
 
 urlpatterns = [
     path('create/', ProjectListCreateView.as_view(), name='project-create'),
@@ -11,6 +13,7 @@ urlpatterns = [
     path('employee/<int:pk>/', EmployeeProjectsView.as_view()),
     path('employee-projects/<int:pk>/', EmployeeProjectsView.as_view(), name='employee-projects'),
     path('project/<int:project_id>/employees/', ProjectEmployeesView.as_view()),
+    path('', include(router.urls)),
     
 ]
     

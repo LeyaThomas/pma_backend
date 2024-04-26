@@ -1,9 +1,9 @@
 # views.py
-from rest_framework import generics
+from rest_framework import generics,viewsets
 from rest_framework.generics import RetrieveAPIView
-from .models import Project, ProjectEmployee
+from .models import Project, ProjectEmployee, EmployeeAnswer
 from users.models import Cususer
-from .serializers import ProjectEmployeeSerializer, ProjectSerializer, ProjectEmployeeSerializer, CususerSerializer
+from .serializers import ProjectEmployeeSerializer, ProjectSerializer, ProjectEmployeeSerializer, CususerSerializer, EmployeeAnswerSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 
@@ -42,3 +42,8 @@ class ProjectEmployeesView(generics.ListAPIView):
     def get_queryset(self):
         project_id = self.kwargs['project_id']
         return Cususer.objects.filter(projectemployee__project_id=project_id)
+    
+@permission_classes([AllowAny])
+class EmployeeAnswerViewSet(viewsets.ModelViewSet):
+    queryset = EmployeeAnswer.objects.all()
+    serializer_class = EmployeeAnswerSerializer
