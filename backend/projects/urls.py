@@ -1,7 +1,7 @@
 #projects.urls.py
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ProjectListCreateView, ProjectRetrieveUpdateDestroyView ,ProjectEmployeeListCreateView, EmployeeProjectsView, ProjectEmployeesView, EmployeeAnswerViewSet
+from .views import ProjectListCreateView, ProjectRetrieveUpdateDestroyView ,ProjectEmployeeListCreateView, EmployeeProjectsView, ProjectEmployeesView, EmployeeAnswerViewSet, EmployeeMarkViewSet
  
 router = DefaultRouter()
 router.register('employeeanswer', EmployeeAnswerViewSet)
@@ -14,6 +14,7 @@ urlpatterns = [
     path('employee-projects/<int:pk>/', EmployeeProjectsView.as_view(), name='employee-projects'),
     path('project/<int:project_id>/employees/', ProjectEmployeesView.as_view()),
     path('', include(router.urls)),
+    path('employee-marks/', EmployeeMarkViewSet.as_view({'get': 'list'}), name='employee-marks'),
     
 ]
     
