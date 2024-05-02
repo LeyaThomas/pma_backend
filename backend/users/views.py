@@ -7,6 +7,7 @@ from .serializers import CompanySerializer, CusUserSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from django.http import Http404
+from django.contrib.auth.models import User
 
 # Create your views here.
 @permission_classes([AllowAny])
@@ -26,3 +27,9 @@ class UserDetailView(APIView):
         cususer = self.get_object(pk)
         serializer = CusUserSerializer(cususer)
         return Response(serializer.data)
+    
+@permission_classes([AllowAny])   
+class UserCountView(APIView):
+    def get(self, request, format=None):
+        total_users = User.objects.count()
+        return Response({'total_users': total_users})

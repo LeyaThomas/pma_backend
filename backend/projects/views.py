@@ -1,4 +1,6 @@
 # views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework import generics,viewsets
 from rest_framework.generics import RetrieveAPIView
 from .models import Project, ProjectEmployee, EmployeeAnswer
@@ -6,6 +8,10 @@ from users.models import Cususer
 from .serializers import ProjectEmployeeSerializer, ProjectSerializer, ProjectEmployeeSerializer, CususerSerializer, EmployeeAnswerSerializer, EmployeeMarkSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
+from django.contrib.auth.models import User
+from django.db.models import Count
+from django.shortcuts import get_object_or_404
+
 
 @permission_classes([AllowAny])
 class ProjectListCreateView(generics.ListCreateAPIView):
@@ -64,3 +70,20 @@ class EmployeeMarkViewSet(viewsets.ReadOnlyModelViewSet):
         if project_id is not None:
             queryset = queryset.filter(project_id=project_id)
         return queryset
+    
+@permission_classes([AllowAny])   
+class ProjectCountView(APIView):
+    def get(self, request, format=None):
+        total_projects = Project.objects.count()
+        return Response({'total_projects': total_projects})
+    
+@permission_classes([AllowAny])   
+class UserProjectCountView(APIView):
+    def get(self, request, user_id, format=None):
+        try:
+            cususer = Cususer.objects.get(id=user_id)
+        except Cususer.DoesNotExist:
+            return Response({'error': 'Cususer with this ID does not exist.'}, status=404)
+        
+        user_projects_count = ProjectEmployee.objects.filter(employee=cususer).values('project').distinct().count()
+        return Response({'user_projects_count': user_projects_count})
