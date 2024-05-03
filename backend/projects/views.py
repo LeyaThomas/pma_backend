@@ -5,7 +5,7 @@ from rest_framework import generics,viewsets
 from rest_framework.generics import RetrieveAPIView
 from .models import Project, ProjectEmployee, EmployeeAnswer
 from users.models import Cususer
-from .serializers import ProjectEmployeeSerializer, ProjectSerializer, ProjectEmployeeSerializer, CususerSerializer, EmployeeAnswerSerializer, EmployeeMarkSerializer
+from .serializers import ProjectEmployeeSerializer, ProjectSerializer, ProjectEmployeeSerializer, CususerSerializer, EmployeeAnswerSerializer, EmployeeMarkSerializer, ProjectStatusSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from django.contrib.auth.models import User
@@ -87,3 +87,8 @@ class UserProjectCountView(APIView):
         
         user_projects_count = ProjectEmployee.objects.filter(employee=cususer).values('project').distinct().count()
         return Response({'user_projects_count': user_projects_count})
+    
+@permission_classes([AllowAny])    
+class ProjectUpdateStatusView(generics.UpdateAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectStatusSerializer

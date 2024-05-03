@@ -43,3 +43,8 @@ class EmployeeMarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeAnswer
         fields = ['employee', 'mark']
+
+class ProjectStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ['status']
