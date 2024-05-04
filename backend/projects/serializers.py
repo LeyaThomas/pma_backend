@@ -48,3 +48,15 @@ class ProjectStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ['status']
+
+class ProjectDeadlineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ['name', 'status', 'deadline']
+
+class EmployeeProjectDeadlineSerializer(serializers.ModelSerializer):
+    project = ProjectSerializer(read_only=True)
+
+    class Meta:
+        model = ProjectEmployee
+        fields = ['project']

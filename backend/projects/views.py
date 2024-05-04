@@ -1,11 +1,12 @@
 # views.py
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics,viewsets
 from rest_framework.generics import RetrieveAPIView
 from .models import Project, ProjectEmployee, EmployeeAnswer
 from users.models import Cususer
-from .serializers import ProjectEmployeeSerializer, ProjectSerializer, ProjectEmployeeSerializer, CususerSerializer, EmployeeAnswerSerializer, EmployeeMarkSerializer, ProjectStatusSerializer
+from .serializers import ProjectEmployeeSerializer, ProjectSerializer, ProjectEmployeeSerializer, CususerSerializer, EmployeeAnswerSerializer, EmployeeMarkSerializer, ProjectStatusSerializer, EmployeeProjectDeadlineSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from django.contrib.auth.models import User
@@ -92,3 +93,11 @@ class UserProjectCountView(APIView):
 class ProjectUpdateStatusView(generics.UpdateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectStatusSerializer
+
+@permission_classes([AllowAny])
+class EmployeeProjectDeadlineView(generics.ListAPIView):
+    serializer_class = EmployeeProjectDeadlineSerializer
+
+    def get_queryset(self):
+        employee_id = self.kwargs['employee_id']
+        return ProjectEmployee.objects.filter(employee__id=employee_id, project__deadline__gte=timezone.now()).order_by('project__deadline')
