@@ -3,10 +3,10 @@ from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics,viewsets
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import RetrieveAPIView , ListAPIView
 from .models import Project, ProjectEmployee, EmployeeAnswer
 from users.models import Cususer
-from .serializers import ProjectEmployeeSerializer, ProjectSerializer, ProjectEmployeeSerializer, CususerSerializer, EmployeeAnswerSerializer, EmployeeMarkSerializer, ProjectStatusSerializer, EmployeeProjectDeadlineSerializer
+from .serializers import ProjectEmployeeSerializer, ProjectSerializer, ProjectEmployeeSerializer, CususerSerializer, EmployeeAnswerSerializer, EmployeeMarkSerializer, ProjectStatusSerializer, EmployeeProjectDeadlineSerializer ,ProjectEmployeeDetailSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
 from django.contrib.auth.models import User
@@ -101,3 +101,20 @@ class EmployeeProjectDeadlineView(generics.ListAPIView):
     def get_queryset(self):
         employee_id = self.kwargs['employee_id']
         return ProjectEmployee.objects.filter(employee__id=employee_id, project__deadline__gte=timezone.now()).order_by('project__deadline')
+
+@permission_classes([AllowAny])    
+class ProjectEmployeesView(ListAPIView):
+    serializer_class = ProjectEmployeeDetailSerializer
+
+    def get_queryset(self):
+        project_id = self.kwargs['project_id']
+        return ProjectEmployee.objects.filter(project__id=project_id)
+    
+@permission_classes([AllowAny])    
+class ProjectEmployeeMarksView(ListAPIView):
+    serializer_class = EmployeeAnswerSerializer
+
+    def get_queryset(self):
+        project_id = self.kwargs['project_id']
+        return EmployeeAnswer.objects.filter(project__id=project_id)
+    

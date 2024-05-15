@@ -26,10 +26,17 @@ class ProjectEmployeeSerializer(serializers.ModelSerializer):
         return ProjectEmployee.objects.create(employee=employee, project=project, **validated_data)
 
 class CususerSerializer(serializers.ModelSerializer):
-    projects = ProjectEmployeeSerializer(source='projectemployee_set', many=True, read_only=True)
     class Meta:
         model = Cususer
+        
         fields = '__all__'  
+
+class ProjectEmployeeDetailSerializer(serializers.ModelSerializer):
+    employee = CususerSerializer(read_only=True)
+
+    class Meta:
+        model = ProjectEmployee
+        fields = ['employee']
 
 class EmployeeAnswerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -60,3 +67,5 @@ class EmployeeProjectDeadlineSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectEmployee
         fields = ['project']
+
+
