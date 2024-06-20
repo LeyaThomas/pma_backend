@@ -167,5 +167,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Absolute path for collected static files
 # STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),  # Add your static files directory here
+#    os.path.join(BASE_DIR, 'static'),  # Add your static files directory here
 # ]
