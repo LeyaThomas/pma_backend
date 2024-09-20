@@ -6,10 +6,20 @@
       "config": { "maxLambdaSize": "50mb", "runtime": "python3.9" }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "backend/wsgi.py"
+      "source": "/(.*)",
+      "destination": "backend/wsgi.py"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/users/companies/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "X-Requested-With, Content-Type, Authorization" }
+      ]
     }
   ]
 }
